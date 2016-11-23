@@ -24,7 +24,7 @@ matrix:
   #- python: '2.7'
   #  env: PYRO="Pyro" JYTHON="org.python:jython-installer:2.7.0"
   - python: pypy
-    env: PYRO="Pyro"  YAML="pyyaml"
+    env: PYRO="Pyro4"  YAML="pyyaml"
   - python: pypy3
     env: PYRO="Pyro4" YAML="pyyaml"
 install:

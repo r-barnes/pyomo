@@ -209,6 +209,29 @@ class _ConstraintData(ActiveComponentData):
         else:
             return value(self.upper)-value(self.body)
 
+    def slack(self):
+        """
+        Returns the value of U-f(x) if U is finite or f(x)-L if L is finite.
+        """
+        if self.upper is None:
+            if self.lower is None:
+                return float('inf')
+            return value(self.lower)-value(self.body)
+        return value(self.upper)-value(self.body)
+
+    @property
+    def expr(self):
+        if self.upper is None:
+            if self.lower is None:
+                return self.body
+            return "%s <= %s" % (self.lower, self.body)
+        else:
+            if self.lower is None:
+                return "%s <= %s" % (self.body, self.upper)
+            if self.equality:
+                return "%s == %s" % (self.body, self.upper)
+            return "%s <= %s <= %s" % (self.lower, self.body, self.upper)
+
     #
     # Abstract Interface
     #

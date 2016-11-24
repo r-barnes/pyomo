@@ -4,8 +4,8 @@
 # Import PuLP modeler functions
 from pyomo.simple import *
 
-# A new LP problem
-prob = SimpleProblem()
+# A new problem
+prob = SimpleModel()
 
 # Variables
 # 0 <= x <= 4
@@ -16,25 +16,25 @@ y = prob.var("y", bounds=(-1,1))
 z = prob.var("z", bounds=(0,None))
 
 # Objective
-prob += x + 4*y + 9*z, "obj"
+prob += x + 4*y + 9*z
 # (the name at the end is facultative)
 
 # Constraints
-prob += x+y <= 5, "c1"
-prob += x+z >= 10, "c2"
-prob += -y+z == 7, "c3"
+prob += x+y <= 5
+prob += x+z >= 10
+prob += -y+z == 7
 
-# Solve the problem using glpk
+# Optimize
 status = prob.solve("glpk")
 
 # Print the status of the solved LP
-print("Status:", LpStatus[prob.status])
+print("Status: %s" % status['Solver'][0]['termination condition'])
 
 # Print the value of the variables at the optimum
-print("x = ", value(x))
-print("y = ", value(y))
-print("z = ", value(z))
+print("x = %f" % value(x))
+print("y = %f" % value(y))
+print("z = %f" % value(z))
 
 # Print the value of the objective
-print("objective=", value(prob.objective()))
+print("objective = %f" % value(prob.objective()))
 

@@ -7,7 +7,7 @@
 #  This software is distributed under the BSD License.
 #  _________________________________________________________________________
 
-__all__ = ['SimpleModel']
+__all__ = ['LiteModel']
 
 import six
 from pyomo.core.base.PyomoModel import ConcreteModel
@@ -18,9 +18,10 @@ from pyomo.core.base.constraint import ConstraintList
 from pyomo.opt.base.solvers import SolverFactory
 
 
-class SimpleModel(object):
+class LiteModel(object):
 
     def __init__(self, maximize=False):
+        """Constructor"""
         import pyomo.environ
         self.model = ConcreteModel()
         self.model.o = ObjectiveList()
@@ -28,9 +29,19 @@ class SimpleModel(object):
         self._maximize = maximize
 
     def suffix(self, name):
+        """Declare a suffix with the specified name."""
         setattr(self.model, name, Suffix(direction=Suffix.IMPORT))
 
     def var(self, *args, **kwds):
+        """
+        Declare a variable.
+
+        The first argument is the name of the variable name used by Pyomo.
+        The remaining arguments are assumed to be index sets for the model.
+
+	    The keyword arguments are the same as the keyword arguments
+	    supported by the Pyomo Var component.
+        """
         _args = args[1:]
         name = args[0]
         _v = Var(*_args, **kwds)
@@ -38,6 +49,7 @@ class SimpleModel(object):
         return _v
 
     def __iadd__(self, expr):
+        """Add an objective of constraint to the model."""
         if expr is True:
             self
         elif expr.is_relational():
@@ -50,21 +62,32 @@ class SimpleModel(object):
         return self
 
     def solve(self, name, *args, **kwargs):
+        """
+        Optimize the model using the named solver.
+
+        The arguments and keyword arguments are the same as supported by Pyomo
+        solver objects.
+        """
         solver = SolverFactory(name)
         return solver.solve(self.model, *args, **kwargs)
    
     def pprint(self):
+        """Print the equations in the model"""
         self.model.pprint()
 
     def display(self):
+        """Display the values in the model"""
         self.model.display()
  
     def objective(self, i=1):
+        """Return the i-th objective"""
         return self.model.o._data[i]
 
     def constraint(self, i=1):
+        """Return the i-th constraint"""
         return self.model.c._data[i]
 
     def constraints(self):
+        """Iterate through all constraints"""
         return six.itervalues(self.model.c)
 

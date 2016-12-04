@@ -10,7 +10,7 @@
 from pyomo.util.plugin import PluginGlobals
 PluginGlobals.add_env("pyomo")
 
-from pyomo.simple.core import *
+from pyomo.lite.core import *
 from pyomo.core.base.numvalue import value
 from pyomo.core.base.expr import *
 from pyomo.core.base.set_types import *

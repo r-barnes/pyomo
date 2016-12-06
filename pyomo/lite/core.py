@@ -19,6 +19,50 @@ from pyomo.opt.base.solvers import SolverFactory
 
 
 class LiteModel(object):
+    """
+    This class illustrates how Pyomo can be used in a simple, less
+    object-oriented manner.  Specifically, this class mimics the
+    modeling style supported by PuLP (https://github.com/coin-or/pulp).
+
+    This class contains a Pyomo model, and it includes methods that
+    support a simple API for declaring variables, adding objectives
+    and constraints, and solving the model.  Optimization results are
+    stored in the variable objects, which are returned to the user.
+
+    For example, the following model minimizes the surface area of a 
+    soda can while constraining its volume:
+
+        from pyomo.lite import *
+        from math import pi
+
+        m = LiteModel()
+
+        r = m.var('r', bounds=(0,None))
+        h = m.var('h', bounds=(0,None))
+
+        m += 2*pi*r*(r + h)
+        m += pi*h*r**2 == 355
+
+    This model can be solved with the IPOPT solver:
+
+        status = m.solve("ipopt")
+        print("Status = %s" % status.solver.termination_condition)
+
+    The optimum value and decision variables can be easily accesed:
+
+        print("%s = %f" % (r, value(r)))
+        print("%s = %f" % (h, value(h)))
+        print("Objective = %f" % value(m.objective()))
+
+    NOTE:  This class illustrates the basic steps in formulating
+    and solving an optimization problem, but it is not meant to
+    serve as a replacement for Pyomo.  Pyomo models supports a much
+    richer set of modeling components than simple objectives and
+    constraints.  In particular, the Block component supports the
+    expression of hierarchical models with nested structure.  The
+    LiteModel class only supports a simple, flat optimization
+    problems.
+    """
 
     def __init__(self, maximize=False):
         """Constructor"""
@@ -44,6 +88,8 @@ class LiteModel(object):
         """
         _args = args[1:]
         name = args[0]
+        # If the variable name is "x", then the following is equivalent to:
+        #  self.model.x = Var(*_args, **kwds)
         _v = Var(*_args, **kwds)
         setattr(self.model, name, _v)
         return _v
@@ -56,6 +102,8 @@ class LiteModel(object):
             self.model.c.add( expr )
         else:
             self.model.o.add( expr )
+            # Annotate the objective if the user specifies that this is
+            # a maximization problem.
             if self._maximize:
                 n = len(self.model.o)
                 self.model.o._data[n].sense = maximize

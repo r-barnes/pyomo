@@ -54,6 +54,20 @@ class LiteModel(object):
         print("%s = %f" % (h, value(h)))
         print("Objective = %f" % value(m.objective()))
 
+    NOTE: Here is a comparison of features between PuLP and pyomo.lite:
+    . LP/MILP:      PuLP=YES, Lite=YES
+    . NLP/MILNP:    PuLP=NO,  Lite=YES
+    . Column-wise:  PuLP=YES, Lite=NO
+    . Solvers:
+        CPLEX       PuLP=YES, Lite=YES
+        Gurobi      PuLP=YES, Lite=YES
+        XPRESS      PuLP=YES, Lite=YES
+        GLPK        PuLP=YES, Lite=YES
+        CBC         PuLP=YES, Lite=YES
+        CoinMP      PuLP=YES, Lite=NO
+        Ipopt       PuLP=NO,  Lite=YES
+        ASL         PulP=NO,  Lite=YES
+
     NOTE:  This class illustrates the basic steps in formulating
     and solving an optimization problem, but it is not meant to
     serve as a replacement for Pyomo.  Pyomo models supports a much

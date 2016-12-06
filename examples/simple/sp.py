@@ -1,6 +1,6 @@
 # sp.py - Adapted from pyomo/examples/concrete
 
-from pyomo.simple import *
+from pyomo.lite import *
 
 c=1.0
 b=1.5
@@ -9,7 +9,7 @@ d = {1:15, 2:60, 3:72, 4:78, 5:82}
 
 scenarios = range(1,6)
 
-m = SimpleModel()
+m = LiteModel()
 x = m.var('x', within=NonNegativeReals)
 y = m.var('y', scenarios, within=NonNegativeReals)
 
@@ -21,7 +21,7 @@ m += sum(y[i] for i in scenarios)/5.0
 
 status = m.solve("glpk")
 
-print("Status = %s" % status['Solver'][0]['termination condition'])
+print("Status = %s" % status.solver.termination_condition)
 
 print("%s = %f" % (x, value(x)))
 for i in y:

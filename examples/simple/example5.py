@@ -4,13 +4,13 @@
 # G. Cornuejols, M. Dawande, A class of hard small 0-1 programs, 1998.
 # With m>=4, these problems are often *very* difficult.
 
-from pyomo.simple import *
+from pyomo.lite import *
 from random import *
 
 seed(127398270)
 
 # A new problem
-prob = SimpleModel()
+prob = LiteModel()
 
 # Parameters
 # Number of constraints
@@ -40,7 +40,7 @@ for j in range(m):
 status = prob.solve("glpk")
 
 # Print the status of the solved LP
-print("Status: %s", status['Solver'][0]['termination condition'])
+print("Status: %s" % status.solver.termination_condition)
 
 # Print the value of the variables at the optimum
 for v in (x,s,w):

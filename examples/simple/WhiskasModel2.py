@@ -1,7 +1,7 @@
 # The Full Whiskas Model Python Formulation adapted from PuLP
 # Authors: Antony Phillips, Dr Stuart Mitchell  2007
 
-from pyomo.simple import *
+from pyomo.lite import *
 
 # Creates a list of the Ingredients
 Ingredients = ['CHICKEN', 'BEEF', 'MUTTON', 'RICE', 'WHEAT', 'GEL']
@@ -47,15 +47,15 @@ saltPercent = {'CHICKEN': 0.002,
                'GEL': 0.000}
 
 # Create the 'prob' variable to contain the problem data
-prob = SimpleModel()
+prob = LiteModel()
 
 # A dictionary called 'ingredient_vars' is created to contain the referenced Variables
 ingredient_vars = prob.var("Ingr",Ingredients, bounds=(0,None))
 
-# The objective function is added to 'prob' first
+# Adding the objective function to 'prob'
 prob += sum(costs[i]*ingredient_vars[i] for i in Ingredients) # "Total Cost of Ingredients per can"
 
-# The five constraints are added to 'prob'
+# Adding five constraints to 'prob'
 prob += sum(ingredient_vars[i] for i in Ingredients) == 100  # "PercentagesSum"
 prob += sum(proteinPercent[i] * ingredient_vars[i] for i in Ingredients) >= 8.0 # "ProteinRequirement"
 prob += sum(fatPercent[i] * ingredient_vars[i] for i in Ingredients) >= 6.0 # "FatRequirement"
@@ -65,12 +65,12 @@ prob += sum(saltPercent[i] * ingredient_vars[i] for i in Ingredients) <= 0.4 # "
 # Solve
 status = prob.solve("glpk")
 
-# The status of the solution is printed to the screen
-print("Status: %s" %  status['Solver'][0]['termination condition'])
+# Print the status of the solution
+print("Status: %s" %  status.solver.termination_condition)
 
-# Each of the variables is printed with it's resolved optimum value
+# Print the optimum
 for v in ingredient_vars:
     print("%s = %f" % (ingredient_vars[v], value(ingredient_vars[v])))
 
-# The optimised objective function value is printed to the screen    
+# Print the optimized objective function value
 print("Total Cost of Ingredients per can = %f " % value(prob.objective()))

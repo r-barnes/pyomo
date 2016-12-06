@@ -1,8 +1,9 @@
 # sodacan.py
-from pyomo.simple import *
+
+from pyomo.lite import *
 from math import pi
 
-m = SimpleModel()
+m = LiteModel()
 
 r = m.var('r', bounds=(0,None))
 h = m.var('h', bounds=(0,None))
@@ -12,7 +13,7 @@ m += pi*h*r**2 == 355
 
 status = m.solve("ipopt")
 
-print("Status = %s" % status['Solver'][0]['termination condition'])
+print("Status = %s" % status.solver.termination_condition)
 
 print("%s = %f" % (r, value(r)))
 print("%s = %f" % (h, value(h)))

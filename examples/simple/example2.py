@@ -2,12 +2,11 @@
 # problem included in the GLPK # 4.4 distribution. 
 # It's a hard knapsack problem.
 
-
-from pyomo.simple import *
+from pyomo.lite import *
 from math import *
 
 # A new problem
-prob = SimpleModel(maximize=True)
+prob = LiteModel(maximize=True)
 
 # Parameters
 # Size of the problem
@@ -34,7 +33,7 @@ prob += weight <= b
 status = prob.solve("glpk")
 
 # Print the status of the solved LP
-print("Status: %s" % status['Solver'][0]['termination condition'])
+print("Status: %s" % status.solver.termination_condition)
 
 # Print the value of the variables at the optimum
 for i in x:

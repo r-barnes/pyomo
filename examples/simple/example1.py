@@ -1,11 +1,9 @@
 # Example adapted from PuLP file test1.py
 
-
-# Import PuLP modeler functions
-from pyomo.simple import *
+from pyomo.lite import *
 
 # A new problem
-prob = SimpleModel()
+prob = LiteModel()
 
 # Variables
 # 0 <= x <= 4
@@ -17,7 +15,6 @@ z = prob.var("z", bounds=(0,None))
 
 # Objective
 prob += x + 4*y + 9*z
-# (the name at the end is facultative)
 
 # Constraints
 prob += x+y <= 5
@@ -27,8 +24,13 @@ prob += -y+z == 7
 # Optimize
 status = prob.solve("glpk")
 
+# Print the model
+prob.pprint()
+# Display the model values
+prob.display()
+
 # Print the status of the solved LP
-print("Status: %s" % status['Solver'][0]['termination condition'])
+print("Status: %s" % status.solver.termination_condition)
 
 # Print the value of the variables at the optimum
 print("x = %f" % value(x))

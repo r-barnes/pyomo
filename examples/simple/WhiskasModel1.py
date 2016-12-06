@@ -1,10 +1,10 @@
 # The Simplified Whiskas Model adapted from PuLP
 # Authors: Antony Phillips, Dr Stuart Mitchell  2007
 
-from pyomo.simple import *
+from pyomo.lite import *
 
 # Create the 'prob' variable to contain the problem data
-prob = SimpleModel()
+prob = LiteModel()
 
 # The 2 variables Beef and Chicken are created with a lower limit of zero
 x1 = prob.var("ChickenPercent", within=NonNegativeIntegers)
@@ -23,12 +23,12 @@ prob += 0.002*x1 + 0.005*x2 <= 0.4 # "SaltRequirement"
 # Solve
 status = prob.solve("glpk")
 
-# The status of the solution is printed to the screen
-print("Status: %s" % status['Solver'][0]['termination condition'])
+# Print the status of the solution
+print("Status: %s" % status.solver.termination_condition)
 
-# Each of the variables is printed with it's resolved optimum value
+# Print the optimum
 print("%s = %f" % (x1, value(x1)))
 print("%s = %f" % (x2, value(x2)))
     
-# The optimised objective function value is printed to the screen
+# The optimized objective function value
 print("Total Cost of Ingredients per can = %f" % value(prob.objective()))

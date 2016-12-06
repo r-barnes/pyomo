@@ -1,8 +1,8 @@
 # rosen.py - Adapted from pyomo/examples/concrete/rosen.py
 
-from pyomo.simple import *
+from pyomo.lite import *
 
-m = SimpleModel()
+m = LiteModel()
 
 x = m.var('x')
 y = m.var('y')
@@ -11,7 +11,7 @@ m += (x-1)**2 + 100*(y-x**2)**2
 
 status = m.solve("ipopt")
 
-print("Status = %s" % status['Solver'][0]['termination condition'])
+print("Status = %s" % status.solver.termination_condition)
 
 print("%s = %f" % (x, value(x)))
 print("%s = %f" % (y, value(y)))

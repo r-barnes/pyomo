@@ -5,7 +5,7 @@
 # Vladimir I. Norkin, Yuri M. Ermoliev, Andrzej Ruszczynski
 # IIASA, WP-94-021, April 1994 (revised October 1995).
 
-from pyomo.simple import *
+from pyomo.lite import *
 from random import *
 
 seed(187034987)
@@ -30,7 +30,7 @@ q = [[randint(ai, ai+bi) for ai,bi in ab] for ab in interval]
 delta = [[randint(ai, ai+bi) for ai,bi in ab] for ab in interval]
 
 # Problem
-lp = SimpleModel()
+lp = LiteModel()
 
 # Variables
 # x : Whether or not to start a project

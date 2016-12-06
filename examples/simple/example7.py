@@ -1,9 +1,9 @@
 # Test for output of dual variables
 
-from pyomo.simple import *
+from pyomo.lite import *
 
 # A new problem
-prob = SimpleModel()
+prob = LiteModel()
 
 x = prob.var("x", bounds=(0, 4))
 
@@ -23,7 +23,7 @@ prob.suffix('rc')
 
 status = prob.solve("glpk")
 
-print("Status: %s" % status['Solver'][0]['termination condition'])
+print("Status: %s" % status.solver.termination_condition)
 
 for v in (x,y,z):
 	print("%s = %f\t Reduced Cost = %f" % (v, value(v), v.get_suffix_value('rc')))

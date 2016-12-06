@@ -427,7 +427,7 @@ class Var(IndexedComponent):
         initialize  A rule for setting up this variable with
                         existing model data
         rule        A function for declaring variables.
-        dense       An option to specify that the variables are declared densely.
+        dense       If False, then variables are declared sparsely
     """
 
     def __new__(cls, *args, **kwds):
